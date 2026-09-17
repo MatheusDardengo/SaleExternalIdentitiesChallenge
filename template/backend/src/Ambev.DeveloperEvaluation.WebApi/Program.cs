@@ -53,6 +53,22 @@ public class Program
             builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
             var app = builder.Build();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                try
+                {
+                    var context = services.GetRequiredService<DefaultContext>();
+                    context.Database.Migrate();
+                    Log.Information("Database migrated successfully.");
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "An error occurred while migrating the database.");
+                }
+            }
+
             app.UseMiddleware<ValidationExceptionMiddleware>();
 
             if (app.Environment.IsDevelopment())
