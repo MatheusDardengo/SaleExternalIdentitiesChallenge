@@ -19,7 +19,18 @@ public class CreateSaleHandler : IRequestHandler<CreateSaleCommand, CreateSaleRe
 
     public async Task<CreateSaleResult> Handle(CreateSaleCommand request, CancellationToken cancellationToken)
     {
-        var sale = _mapper.Map<Sale>(request);
+        var sale = new Sale(
+                request.SaleNumber,
+                request.CustomerId,
+                request.CustomerName,
+                request.BranchId,
+                request.BranchName
+            );
+
+        foreach (var item in request.Items)
+        {
+            sale.AddItem(item.ProductId, item.ProductName, item.Quantity, item.UnitPrice);
+        }
 
         var createdSale = await _saleRepository.CreateAsync(sale, cancellationToken);
 

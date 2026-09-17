@@ -14,11 +14,17 @@ public class SaleItemConfiguration : IEntityTypeConfiguration<SaleItem>
 
         builder.Property(si => si.ProductName)
             .IsRequired()
-            .HasMaxLength(100);
+                .HasMaxLength(100);
         builder.Property(si => si.Quantity)
             .IsRequired();
         builder.Property(si => si.UnitPrice)
-            .IsRequired();
-        builder.Property(si => si.Discount).HasColumnType("decimal(18,2)");
+            .IsRequired()
+                .HasColumnType("decimal(18,2)");
+        builder.Property(si => si.Discount)
+            .HasColumnType("decimal(18,2)");
+
+        builder.Ignore(si => si.TotalAmount);
+
+
     }
 }

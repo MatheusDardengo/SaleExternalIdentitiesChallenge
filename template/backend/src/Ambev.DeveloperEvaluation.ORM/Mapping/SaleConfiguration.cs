@@ -17,16 +17,16 @@ public class SaleConfiguration: IEntityTypeConfiguration<Sale>
             .HasMaxLength(50);
         builder.Property(s => s.BranchName).IsRequired();
 
-        builder.Property(s => s.TotalSaleAmount);
-        //TODO need to check TotalSaleAmount 
+        builder.Ignore(s => s.TotalSaleAmount);
+         
 
         builder.HasMany(s => s.Items)
                    .WithOne()
                    .HasForeignKey(si => si.SaleId)
                    .OnDelete(DeleteBehavior.Cascade);
 
-
-
+        builder.Metadata.FindNavigation(nameof(Sale.Items))
+                   ?.SetPropertyAccessMode(PropertyAccessMode.Field);
 
     }
 }
