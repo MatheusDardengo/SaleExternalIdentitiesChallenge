@@ -69,4 +69,12 @@ public class Sale
 
         item.Cancel();
     }
+
+    public void ClearItems()
+    {
+        if (IsCancelled)
+            throw new InvalidOperationException("Não é possível alterar uma venda cancelada.");
+
+        _items.Clear();
+    }
 }
